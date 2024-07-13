@@ -1,4 +1,4 @@
-const { Student } = require('../models');
+const { Student, Course } = require('../models');
 
 exports.getAllStudents = async (req, res) => {
     try {
@@ -71,10 +71,11 @@ exports.deleteStudent = async (req, res) => {
 
 exports.studentMultipleCourseCreate = async (req, res) => {
     try {
+        console.log(req.body.course_id)
         const student = await Student.findByPk(req.params.id);
         if (!student) return res.status(404).send({ status: 'error', message: 'Student not found' });
 
-        await student.addCourses(req.body.courseIds);
+        await student.addCourses(req.body.course_id);
         return res.status(201).send({ message: 'Courses associated successfully' });
     } catch (error) {
         return res.status(400).send({ status: 'error', message: error.message });

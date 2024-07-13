@@ -2,6 +2,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 const express = require('express');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const sequelize = require('./config/database');
 const cors = require("cors");
 const swaggerJsDoc = require('swagger-jsdoc');
@@ -9,6 +10,13 @@ const swaggerUI = require('swagger-ui-express');
 
 const authRoutes = require('./routes/authRoutes');
 const courseRoutes = require('./routes/courseRoutes');
+const studentRoutes = require('./routes/studentRoutes');
+const enrollmentRoutes = require('./routes/enrollmentRoutes');
+const attendanceRoutes = require('./routes/attendanceRoutes');
+const taskRoutes = require('./routes/taskRoutes');
+const submissionRoutes = require('./routes/submissionRoutes');
+const gradeWeightRoutes = require('./routes/gradeWeightRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 // Create Express app
 const app = express();
@@ -16,6 +24,7 @@ const app = express();
 // Middleware 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cookieParser());
 app.use(
     cors({
         credentials: true,
@@ -33,6 +42,13 @@ app.get('/', (req, res) => {
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/courses', courseRoutes);
+app.use('/api/students', studentRoutes);
+app.use('/api/enrollments', enrollmentRoutes);
+app.use('/api/attendances', attendanceRoutes);
+app.use('/api/tasks', taskRoutes);
+app.use('/api/submissions', submissionRoutes);
+app.use('/api/gradeWeights', gradeWeightRoutes);
+app.use('/api/users', userRoutes);
 
 sequelize.sync()
     .then(result => {
