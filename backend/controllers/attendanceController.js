@@ -1,15 +1,61 @@
-const { Attendance } = require('../models');
+const { Attendance, Student, Course } = require('../models');
+const { Op } = require('sequelize');
 
 exports.getAttendance = async (req, res) => {
   try {
-    const { student_id, course_id, date } = req.query;
-    const conditions = {};
-    if (student_id) conditions.student_id = student_id;
-    if (course_id) conditions.course_id = course_id;
-    if (date) conditions.date = date;
+    const searchQuery = req.query.q ? req.query.q : '';
+    const statusFilter = req.query.status || '';
+    const startDate = req.query.startDate || '';
+    const endDate = req.query.endDate || '';
 
-    const attendance = await Attendance.findAll({ where: conditions });
-    return res.status(200).json(attendance);
+    const attendanceWhere = {};
+
+    if (startDate && endDate) {
+      attendanceWhere.date = {
+        [Op.between]: [startDate, endDate]
+      };
+    }
+
+    if (statusFilter) {
+      attendanceWhere.status = statusFilter;
+    }
+
+    const attendanceRecords = await Attendance.findAll({
+      where: attendanceWhere,
+      include: [
+        {
+          model: Student,  // Include student data
+          attributes: ['id', 'name', 'email'],  // Select fields to include
+          where: {
+            name: {
+              [Op.like]: `%${searchQuery}%`  // Apply search query to student name
+            }
+          }
+        },
+        {
+          model: Course,  // Include course data
+        }
+      ]
+    });
+    return res.status(200).json(attendanceRecords);
+  } catch (error) {
+    return res.status(500).send({ status: 'error', message: error.message });
+  }
+};
+
+exports.getAttendanceById = async (req, res) => {
+  try {
+    const attendance = await Attendance.findOne({
+      where: {
+        id: req.params.id
+      }
+    });
+
+    if (!attendance) {
+      return res.status(404).send({ status: 'error', message: 'Attendance not found' });
+    }
+
+    return res.status(200).send(attendance);
   } catch (error) {
     return res.status(500).send({ status: 'error', message: error.message });
   }

@@ -1,4 +1,5 @@
 const { Task } = require('../models');
+const { Op } = require('sequelize');
 
 exports.createTask = async (req, res) => {
   const { name, description, course_id, type, date, dueDate, max_score } = req.body;
@@ -42,10 +43,37 @@ exports.deleteTask = async (req, res) => {
 // Get tasks with filtering options
 exports.getTasks = async (req, res) => {
   try {
+    const searchQuery = req.query.q ? req.query.q : '';  // Extract search query from the request
+
+    // Search tasks by name using the search query
     const tasks = await Task.findAll({
-      where: req.query
+      where: {
+        name: {
+          [Op.like]: `%${searchQuery}%`  // Apply search query to task name
+        }
+      }
     });
-    return res.status(200).send(tasks);
+
+    res.status(200).json(tasks);
+  } catch (error) {
+    console.error('Error fetching tasks:', error);
+    res.status(500).json({ message: 'Error fetching tasks', error });
+  }
+};
+
+exports.getTaskById = async (req, res) => {
+  try {
+    const task = await Task.findOne({
+      where: {
+        id: req.params.id,
+      }
+    });
+
+    if (!task) {
+      return res.status(404).send({ status: 'error', message: 'Task not found' });
+    }
+
+    return res.status(200).send(task);
   } catch (error) {
     return res.status(500).send({ status: 'error', message: error.message });
   }

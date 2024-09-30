@@ -158,4 +158,6 @@ router.delete('/delete/:id', authMiddleware(), attendanceController.deleteAttend
  */
 router.get('/', authMiddleware(), attendanceController.getAttendance);
 
+router.get('/getOneAttendance/:id', authMiddleware(), attendanceController.getAttendanceById);
+
 module.exports = router;

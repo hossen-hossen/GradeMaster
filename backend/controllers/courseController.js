@@ -1,11 +1,26 @@
 const { Course } = require('../models');
+const { Op } = require('sequelize');
 
 exports.getAllCourses = async (req, res) => {
     try {
-        const courses = await Course.findAll({ where: { user_id: req.user.id }});
-        return res.status(200).send(courses);
+        const searchQuery = req.query.q ? req.query.q : '';  // Search query from the request
+        const userId = req.user.id;  // Assuming the user ID is stored in req.user
+        // Construct filter based on search query
+        const filterParams = {
+            user_id: userId,
+            [Op.or]: [
+                { name: { [Op.like]: `%${searchQuery}%` } },  // Search in name
+                { description: { [Op.like]: `%${searchQuery}%` } }  // Search in description
+            ]
+        };
+
+        // Fetch courses that match the user and search query
+        const courses = await Course.findAll({ where: filterParams });
+
+        res.status(200).json(courses);
     } catch (error) {
-        return res.status(500).send({ status: 'error', message: error.message });
+        console.error('Error fetching courses:', error);
+        res.status(500).json({ message: 'Error fetching courses', error });
     }
 };
 

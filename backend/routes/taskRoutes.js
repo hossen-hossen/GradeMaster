@@ -186,4 +186,6 @@ router.put('/update/:id', authMiddleware(), taskController.updateTask);
  */
 router.delete('/delete/:id', authMiddleware(), taskController.deleteTask);
 
+router.get('/getOneTask/:id', authMiddleware(), taskController.getTaskById);
+
 module.exports = router;

@@ -2,6 +2,28 @@ const express = require('express');
 const router = express.Router();
 const gradeWeightController = require('../controllers/gradeWeightController');
 const authMiddleware = require('../middleware/authMiddleware');
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
+
+const multerStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const uploadPath = path.join(__dirname, '..', 'public', 'grade'); // Correct absolute path
+        // Ensure the directory exists, if not create it
+        fs.mkdirSync(uploadPath, { recursive: true });
+        cb(null, uploadPath);
+    },
+    filename: (req, file, cb) => {
+        const ext = file.mimetype.split('/')[1];
+        const filename = `grade-${Date.now()}.${ext}`;
+        cb(null, filename);
+    }
+});
+
+const upload = multer({
+    storage: multerStorage,
+    limits: { fileSize: 1024 * 1024 * 5, files: 1 },
+});
 
 /**
  * @swagger
@@ -143,5 +165,9 @@ router.put('/update/:id', authMiddleware(), gradeWeightController.updateGradeWei
  *         description: Internal server error
  */
 router.delete('/delete/:id', authMiddleware(), gradeWeightController.deleteGradeWeight);
+
+router.get('/getOneGradeWeight/:id', authMiddleware(), gradeWeightController.getGradeWeightById);
+
+router.post('/import', authMiddleware(), upload.single('file'), gradeWeightController.importGradeCSV);
 
 module.exports = router;

@@ -1,4 +1,5 @@
-const { Submission, Student } = require('../models');
+const { Submission, Student, Task } = require('../models');
+const { Op } = require('sequelize');
 
 exports.createSubmission = async (req, res) => {
   const { task_id, student_id, grade, submission_date, feedback } = req.body;
@@ -38,11 +39,41 @@ exports.deleteSubmission = async (req, res) => {
 };
 
 exports.getSubmissions = async (req, res) => {
-  const { task_id } = req.params;
   try {
-    const submissions = await Submission.findAll({ where: { task_id }, include: [Student] });
+    const searchQuery = req.query.q ? req.query.q : '';
+    const submissions = await Submission.findAll({
+      include: [
+        {
+          model: Task,
+          where: {
+            name: {
+              [Op.like]: `%${searchQuery}%`  // Apply search query to task name
+            }
+          }
+        },
+        { model: Student }
+      ]
+    });
     res.status(200).json(submissions);
   } catch (error) {
     res.status(400).json({ error: error.message });
+  }
+};
+
+exports.getSubmissionById = async (req, res) => {
+  try {
+    const submission = await Submission.findOne({
+      where: {
+        id: req.params.id,
+      }
+    });
+
+    if (!submission) {
+      return res.status(404).send({ status: 'error', message: 'Task Submission not found' });
+    }
+
+    return res.status(200).send(submission);
+  } catch (error) {
+    return res.status(500).send({ status: 'error', message: error.message });
   }
 };

@@ -1,18 +1,18 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
-import { setUser, logout } from "./userSlice";
-import defaultFetchBase from "./defaultFetchBase";
-import { removeToken, removeUserData } from "../../utils/Utils";
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { setUser, logout } from './userSlice';
+import defaultFetchBase from './defaultFetchBase';
+import { removeToken, removeUserData } from '../../utils/Utils';
 
 export const getMeAPI = createApi({
-    reducerPath: "getMeAPI",
+    reducerPath: 'getMeAPI',
     baseQuery: defaultFetchBase,
-    tagTypes: ["User"],
+    tagTypes: ['User'],
     endpoints: (builder) => ({
         getMe: builder.query({
             query() {
                 return {
-                    url: "/users/personal/me",
-                    credentials: "include",
+                    url: '/users/personal/me',
+                    credentials: 'include',
                 };
             },
             transformResponse: (result) => result,
@@ -21,15 +21,15 @@ export const getMeAPI = createApi({
                     const { data } = await queryFulfilled;
                     dispatch(setUser(data));
                 } catch (error) {
-                    console.log(error);
+                    console.error('Fetching personal user data failed:', error);
                 }
-            }
+            },
         }),
         logoutUser: builder.mutation({
             query() {
                 return {
                     url: '/users/logout',
-                    credentials: 'include'
+                    credentials: 'include',
                 };
             },
             async onQueryStarted(args, { dispatch, queryFulfilled }) {
@@ -39,13 +39,11 @@ export const getMeAPI = createApi({
                     removeUserData();
                     dispatch(logout());
                 } catch (error) {
-                    console.log(error);
+                    console.error('Logout failed:', error);
                 }
-            }
+            },
         }),
     }),
 });
 
-export const {
-    useLogoutUserMutation,
-} = getMeAPI;
+export const { useGetMeQuery, useLogoutUserMutation } = getMeAPI;

@@ -27,7 +27,7 @@ const Task = sequelize.define('Task', {
     allowNull: false,
   },
   date: {
-    type: DataTypes.DATE,
+    type: DataTypes.DATEONLY,
     allowNull: true,  // adjust if you don't want it to be nullable
   },
   due_date: {

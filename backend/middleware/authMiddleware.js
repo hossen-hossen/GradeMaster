@@ -2,12 +2,10 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 module.exports = () => async function auth(req, res, next) {
-    console.log(req.headers.authorization, '-----------')
     if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
         const token = req.headers.authorization.split(' ')[1];
 
         if (!token) return res.status(403).send('Access denied. Please check your API token');
-        
         try {
             const verified = jwt.verify(token, process.env.AUTH_TOKEN_SECRET);
             req.user = verified;

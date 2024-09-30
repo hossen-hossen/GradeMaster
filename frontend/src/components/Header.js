@@ -60,27 +60,27 @@ const Header = () => {
                                     </NavLink>
                                 </NavItem>
                                 <NavItem className="nav-item-responsive">
-                                    <NavLink className={currentRoute.includes('/enrollments') ? 'active' : ''} onClick={() => navigate('/students')}>
+                                    <NavLink className={currentRoute.includes('/enrollments') ? 'active' : ''} onClick={() => navigate('/enrollments')}>
                                         Enrollment
                                     </NavLink>
                                 </NavItem>
                                 <NavItem className="nav-item-responsive">
-                                    <NavLink className={currentRoute.includes('/attendances') ? 'active' : ''} onClick={() => navigate('/students')}>
+                                    <NavLink className={currentRoute.includes('/attendances') ? 'active' : ''} onClick={() => navigate('/attendances')}>
                                         Attendance
                                     </NavLink>
                                 </NavItem>
                                 <NavItem className="nav-item-responsive">
-                                    <NavLink className={currentRoute.includes('/tasks') ? 'active' : ''} onClick={() => navigate('/students')}>
+                                    <NavLink className={currentRoute.includes('/tasks') ? 'active' : ''} onClick={() => navigate('/tasks')}>
                                         Tasks
                                     </NavLink>
                                 </NavItem>
                                 <NavItem className="nav-item-responsive">
-                                    <NavLink className={currentRoute.includes('/task-submissions') ? 'active' : ''} onClick={() => navigate('/students')}>
-                                        Task Submissions
+                                    <NavLink className={currentRoute.includes('/task-submissions') ? 'active' : ''} onClick={() => navigate('/task-submissions')}>
+                                        Submissions
                                     </NavLink>
                                 </NavItem>
                                 <NavItem className="nav-item-responsive">
-                                    <NavLink className={currentRoute.includes('/gradeweight') ? 'active' : ''} onClick={() => navigate('/students')}>
+                                    <NavLink className={currentRoute.includes('/gradeweight') ? 'active' : ''} onClick={() => navigate('/gradeweights')}>
                                         Grade Weight
                                     </NavLink>
                                 </NavItem>

@@ -26,7 +26,7 @@ const Submission = sequelize.define('Submission', {
     allowNull: true, // Grade can be nullable as it's not explicitly marked as NOT NULL
   },
   submission_date: {
-    type: DataTypes.DATE,
+    type: DataTypes.DATEONLY,
     allowNull: true, // Adjust if you don't want it to be nullable
   },
   feedback: {

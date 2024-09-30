@@ -25,9 +25,23 @@ header {
   position: fixed;
   top: 0;
   width: 100%;
-  background-color: #ffffff;
+  background-color: #fdf6ea;
   box-shadow: 0 4px 24px 0 rgba(34, 41, 47, 0.1);
   z-index: 1000;
+  padding: 10px 0;
+  height: 100px;
+  display: flex;
+  align-items: center;
+}
+
+.navbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  /* Distributes the items */
+  align-items: center;
+  /* Vertically centers the navbar items */
+  padding: 0;
 }
 
 .navbar-toggler {
@@ -177,6 +191,13 @@ header {
   margin-bottom: 100px;
 }
 
+.main-title {
+  margin: 0;
+  padding: 30px 15px;
+  background-color: #838C48;
+  color: #fff;
+}
+
 .textArea {
   font-size: 1.125em;
   line-height: 1.8em;
@@ -256,7 +277,7 @@ a {
 
 a:hover {
   cursor: pointer;
-  color: #34568B;
+  color: #000;
 }
 
 .user-img {
@@ -272,18 +293,22 @@ a:hover {
   color: #5E5873;
 }
 
+.main-content {
+  margin-top: 120px;
+}
+
 .form-control:focus,
 .form-control:active {
   outline: none !important;
   box-shadow: none !important;
-  border: 1px solid #34568B;
+  border: 1px solid #000;
 }
 
 .form-check-input:focus,
 .form-check-input:active {
   outline: none !important;
   box-shadow: none !important;
-  border: 1px solid #0d6efd;
+  border: 1px solid #000;
 }
 
 .form-check {
@@ -744,10 +769,6 @@ strong {
   font-size: 1.125em;
 }
 
-.mybutton.orange:hover {
-  background: #34568B !important;
-}
-
 .dropdown-item {
   display: block;
   width: 100%;
@@ -765,7 +786,7 @@ strong {
 .dropdown-item:hover {
   color: #fff;
   text-decoration: none;
-  background-color: #34568B;
+  background-color: #000;
 }
 
 .primary-link {
@@ -912,6 +933,220 @@ strong {
   padding-top: 10px;
 }
 
+.attendance-container {
+  background-color: #f4f4f9;
+  padding: 20px;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.attendance-card {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+}
+
+.attendance-form {
+  padding: 20px;
+}
+
+.input-group {
+  position: relative;
+}
+
+.input-label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.input-icon {
+  margin-right: 8px;
+  color: #6c757d;
+}
+
+.custom-select, .custom-input {
+  padding: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  width: 100%;
+  font-size: 1rem;
+}
+
+.input-error {
+  border-color: #e3342f;
+}
+
+.error-message {
+  color: #e3342f;
+  font-size: 0.875rem;
+  margin-top: 5px;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #28a745;
+  border-color: #28a745;
+  border-radius: 5px;
+}
+
+.submit-button:hover {
+  background-color: #218838;
+}
+
+.course-container {
+  background-color: #f8f9fa;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.course-card {
+  border: none;
+  min-width: 500px;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.course-form {
+  padding: 20px;
+}
+
+.form-control {
+  border-radius: 6px;
+  padding: 10px 15px;
+  font-size: 1rem;
+}
+
+.form-control::placeholder {
+  color: #adb5bd;
+}
+
+.invalid-feedback {
+  font-size: 0.875rem;
+  color: #e3342f;
+}
+
+.student-container {
+  background-color: #f8f9fa;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.student-card {
+  border: none;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.student-form {
+  padding: 20px;
+}
+
+.form-control, .form-select {
+  border-radius: 6px;
+  padding: 10px 15px;
+  font-size: 1rem;
+}
+
+.form-control::placeholder {
+  color: #adb5bd;
+}
+
+.enrollment-container {
+  background-color: #f8f9fa;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.enrollment-card {
+  border: none;
+  min-width: 700px;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.enrollment-form {
+  padding: 20px;
+}
+
+.form-control::placeholder, .form-select::placeholder {
+  color: #adb5bd;
+}
+
+.task-container {
+  background-color: #f8f9fa;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.task-card {
+  border: none;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.task-form {
+  padding: 20px;
+}
+
+.submission-container {
+  background-color: #f8f9fa;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.submission-card {
+  border: none;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.submission-form {
+  padding: 20px;
+}
+
+
+.grade-weight-container {
+  background-color: #f8f9fa;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.grade-weight-card {
+  min-width: 500px;
+  border: none;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.grade-weight-form {
+  padding: 20px;
+}
+
+
+
 @media (max-width: 576px) {
 
   .bill-quantity-div-responsive .bill-header,
@@ -951,5 +1186,35 @@ strong {
   .auth-wrapper .auth-bg {
     padding-top: 3rem;
     margin: auto 0;
+  }
+}
+
+@media (max-width: 768px) {
+  header {
+    height: auto;
+    padding: 20px;
+    justify-content: center;
+  }
+
+  .navbar {
+    flex-direction: column;
+    align-items: center;
+    /* Ensures centered content in mobile view */
+  }
+
+  .nav-item-responsive {
+    margin-right: 0;
+    margin-bottom: 10px;
+    /* Adding space between items */
+  }
+
+  .logo-image {
+    max-height: 50px;
+    /* Adjust the size for mobile */
+  }
+
+  .user-img {
+    width: 30px;
+    height: 30px;
   }
 }

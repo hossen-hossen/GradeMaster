@@ -33,13 +33,13 @@ export const authAPI = createApi({
       async onQueryStarted(_args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          setToken(data.accessToken);
-          setUserData(JSON.stringify(data.userData));
-          await dispatch(getMeAPI.endpoints.getMe.initiate(null));
+          setToken(data.response.accessToken);
+          setUserData(JSON.stringify(data.response.userData));
+          await dispatch(getMeAPI.endpoints.getMe.initiate());
         } catch (error) {}
       }
     })
   })
 });
 
-export const { useLoginUserMutation, useAdminLoginUserMutation, useRegisterUserMutation } = authAPI;
+export const { useLoginUserMutation, useRegisterUserMutation } = authAPI;

@@ -1,15 +1,30 @@
 const { Student, Course } = require('../models');
+const csv = require('fast-csv');
+const fs = require('fs');
+const path = require('path');
+const moment = require('moment');
+const { Op } = require('sequelize');
 
 exports.getAllStudents = async (req, res) => {
     try {
-        let where = {};
-        if (req.query.name) where.name = req.query.name;
-        if (req.query.email) where.email = req.query.email;
+        const searchQuery = req.query.q ? req.query.q : '';  // Extract search query from the request
 
-        const students = await Student.findAll({ where });
-        return res.status(200).send(students);
+        // Define filter for searching students by name
+        const studentFilter = {
+            [Op.or]: [
+                { name: { [Op.like]: `%${searchQuery}%` } }  // Search in student name
+            ]
+        };
+
+        // Fetch students that match the filter and include their associated courses
+        const students = await Student.findAll({
+            where: studentFilter,
+        });
+
+        res.status(200).json(students);
     } catch (error) {
-        return res.status(500).send({ status: 'error', message: error.message });
+        console.error('Error fetching students:', error);
+        res.status(500).json({ message: 'Error fetching students', error });
     }
 };
 
@@ -96,5 +111,51 @@ exports.studentMultipleCourseGet = async (req, res) => {
     } catch (error) {
         return res.status(400).send({ status: 'error', message: error.message });
     }
+};
+
+exports.importStudentCSV = async (req, res) => {
+    const filePath = path.join(__dirname, '..', 'public', 'student', req.file.filename);
+    const students = [];
+    const success = [];
+    const errors = [];
+
+    fs.createReadStream(filePath)
+        .pipe(csv.parse({ headers: true }))
+        .on('data', (row) => {
+            students.push(row);
+        })
+        .on('end', async () => {
+            try {
+                for (const studentData of students) {
+                    try {
+                        const { name, email, phone, gender, date_of_birth, address } = studentData;
+                        var dateOfBirth = moment(date_of_birth, "M/D/YYYY");
+                        const [student, created] = await Student.findOrCreate({
+                            where: { email }, 
+                            defaults: { name, phone, gender, date_of_birth: dateOfBirth.format("YYYY-MM-DD"), address }
+                        });
+
+                        if (created) {
+                            success.push(student);
+                        } else {
+                            errors.push({ student: studentData, message: 'Email already exists' });
+                        }
+                    } catch (error) {
+                        errors.push({ student: studentData, message: error.message });
+                    }
+                }
+
+                fs.unlinkSync(filePath);
+
+                res.status(200).json({
+                    message: 'Students import process completed',
+                    successCount: success.length,
+                    errorCount: errors.length,
+                    errors
+                });
+            } catch (error) {
+                res.status(500).json({ message: 'Error processing CSV', error });
+            }
+        });
 };
 

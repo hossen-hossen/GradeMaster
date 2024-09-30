@@ -165,4 +165,6 @@ router.put('/update/:id', authMiddleware(), submissionController.updateSubmissio
  */
 router.delete('/delete/:id', authMiddleware(), submissionController.deleteSubmission);
 
+router.get('/getOneTaskSubmission/:id', authMiddleware(), submissionController.getSubmissionById);
+
 module.exports = router;

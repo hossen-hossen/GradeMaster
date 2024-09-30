@@ -1,8 +1,31 @@
 const express = require('express');
 const studentController = require('../controllers/studentController');
 const authMiddleware = require('../middleware/authMiddleware');
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
 
 const router = express.Router();
+
+// Configure multer storage with correct path
+const multerStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const uploadPath = path.join(__dirname, '..', 'public', 'student'); // Correct absolute path
+        // Ensure the directory exists, if not create it
+        fs.mkdirSync(uploadPath, { recursive: true });
+        cb(null, uploadPath);
+    },
+    filename: (req, file, cb) => {
+        const ext = file.mimetype.split('/')[1];
+        const filename = `student-${Date.now()}.${ext}`;
+        cb(null, filename);
+    }
+});
+
+const upload = multer({
+    storage: multerStorage,
+    limits: { fileSize: 1024 * 1024 * 5, files: 1 },
+});
 
 /**
  * @swagger
@@ -119,7 +142,7 @@ router.get('/', authMiddleware(), studentController.getAllStudents);
  *       500:
  *         description: Internal server error
  */
-router.get('/getOneCourse/:id', authMiddleware(), studentController.getStudentById);
+router.get('/getOneStudent/:id', authMiddleware(), studentController.getStudentById);
 
 /**
  * @swagger
@@ -350,5 +373,7 @@ router.get('/:id/courses', authMiddleware(), studentController.studentMultipleCo
  */
 
 router.post('/:id/courses', authMiddleware(), studentController.studentMultipleCourseCreate);
+
+router.post('/import', authMiddleware(), upload.single('file'), studentController.importStudentCSV);
 
 module.exports = router;
